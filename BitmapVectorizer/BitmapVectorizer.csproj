@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>NUMERICS;TRACE</DefineConstants>
+    <Nullable>enable</Nullable>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <RootNamespace>BitmapVectorizer</RootNamespace>
+    <TargetFrameworks>net6.0;net47</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="AssemblyInfo">
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <AssemblyName>$(RootNamespace)</AssemblyName>
+    <AssemblyTitle>$(RootNamespace)</AssemblyTitle>
+    <Product>$(RootNamespace)</Product>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net6.0-windows' Or '$(TargetFramework)'=='net47'">
+    <DefineConstants>WINDOWS</DefineConstants>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitmapVectorizer", "BitmapVectorizer\BitmapVectorizer.csproj", "{DCA4234D-AED7-473E-BE15-73702D37F35E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitmapVectorizer.Tests", "BitmapVectorizer.Tests\BitmapVectorizer.Tests.csproj", "{0520A011-9AAC-4209-9A5F-D39077A43EBF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DCA4234D-AED7-473E-BE15-73702D37F35E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCA4234D-AED7-473E-BE15-73702D37F35E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCA4234D-AED7-473E-BE15-73702D37F35E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCA4234D-AED7-473E-BE15-73702D37F35E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0520A011-9AAC-4209-9A5F-D39077A43EBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0520A011-9AAC-4209-9A5F-D39077A43EBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0520A011-9AAC-4209-9A5F-D39077A43EBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0520A011-9AAC-4209-9A5F-D39077A43EBF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {25246D67-AD06-495B-B5C7-E92F9B54BBD9}
+	EndGlobalSection
+EndGlobal
