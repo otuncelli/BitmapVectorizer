@@ -20,80 +20,79 @@ using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("BitmapVectorizer.Tests")]
 
-namespace BitmapVectorizer
+namespace BitmapVectorizer;
+
+public static partial class Potrace
 {
-    public static partial class Potrace
+    public const FLOAT AlphaMaxMin = 0;
+    public const FLOAT AlphaMaxMax = (FLOAT)1.334;
+    public const FLOAT AlphaMaxDef = 1;
+    public const FLOAT OptToleranceMin = 0;
+    public const FLOAT OptToleranceMax = 5;
+    public const FLOAT OptToleranceDef = (FLOAT).2;
+
+    public static TraceResult Trace(IPathList pathlist, FLOAT alphamax = AlphaMaxDef, FLOAT opttolerance = OptToleranceDef,
+        IProgress<ProgressArgs>? progress = null, CancellationToken cancellationToken = default)
     {
-        public const FLOAT AlphaMaxMin = 0;
-        public const FLOAT AlphaMaxMax = (FLOAT)1.334;
-        public const FLOAT AlphaMaxDef = 1;
-        public const FLOAT OptToleranceMin = 0;
-        public const FLOAT OptToleranceMax = 5;
-        public const FLOAT OptToleranceDef = (FLOAT).2;
+        Ensure.IsNotNull(pathlist, nameof(pathlist));
+        Ensure.IsInRange(alphamax, AlphaMaxMin, AlphaMaxMax, nameof(alphamax));
+        Ensure.IsInRange(opttolerance, OptToleranceMin, OptToleranceMax, nameof(opttolerance));
 
-        public static TraceResult Trace(IPathList pathlist, FLOAT alphamax = AlphaMaxDef, FLOAT opttolerance = OptToleranceDef,
-            IProgress<ProgressArgs>? progress = null, CancellationToken cancellationToken = default)
+        Path plist = (Path)pathlist;
+        long cn = 0;
+        long nn = 0;
+
+        if (progress != null)
         {
-            Ensure.IsNotNull(pathlist, nameof(pathlist));
-            Ensure.IsInRange(alphamax, AlphaMaxMin, AlphaMaxMax, nameof(alphamax));
-            Ensure.IsInRange(opttolerance, OptToleranceMin, OptToleranceMax, nameof(opttolerance));
+            ProgressArgs args = ProgressArgs.Init(ProgressLevel.Tracing);
+            progress.Report(args);
+            plist.ForEach(path => nn += path.points.Length);
+        }
 
-            Path plist = (Path)pathlist;
-            long cn = 0;
-            long nn = 0;
+        ParallelOptions po = new ParallelOptions
+        {
+            MaxDegreeOfParallelism = Environment.ProcessorCount,
+            CancellationToken = cancellationToken
+        };
 
-            if (progress != null)
+        void ThrowIfCancellationRequested() => cancellationToken.ThrowIfCancellationRequested();
+
+        float progress1 = 0;
+
+        /* call downstream function with each path */
+        Parallel.ForEach(plist, po, path =>
+        {
+            ThrowIfCancellationRequested();
+            CalcSums(path);
+            ThrowIfCancellationRequested();
+            CalcLon(path);
+            ThrowIfCancellationRequested();
+            BestPolygon(path);
+            ThrowIfCancellationRequested();
+            path.lon = null;
+            AdjustVertices(path);
+            ThrowIfCancellationRequested();
+            path.sums = null;
+            path.po = null;
+            Smooth(path, alphamax);
+            ThrowIfCancellationRequested();
+            if (opttolerance > 0)
             {
-                ProgressArgs args = ProgressArgs.Init(ProgressLevel.Tracing);
-                progress.Report(args);
-                plist.ForEach(path => nn += path.points.Length);
+                OptiCurve(path, opttolerance);
             }
 
-            ParallelOptions po = new ParallelOptions
+            if (progress != null && nn > 0)
             {
-                MaxDegreeOfParallelism = Environment.ProcessorCount,
-                CancellationToken = cancellationToken
-            };
-
-            void ThrowIfCancellationRequested() => cancellationToken.ThrowIfCancellationRequested();
-
-            float progress1 = 0;
-
-            /* call downstream function with each path */
-            Parallel.ForEach(plist, po, path =>
-            {
-                ThrowIfCancellationRequested();
-                CalcSums(path);
-                ThrowIfCancellationRequested();
-                CalcLon(path);
-                ThrowIfCancellationRequested();
-                BestPolygon(path);
-                ThrowIfCancellationRequested();
-                path.lon = null;
-                AdjustVertices(path);
-                ThrowIfCancellationRequested();
-                path.sums = null;
-                path.po = null;
-                Smooth(path, alphamax);
-                ThrowIfCancellationRequested();
-                if (opttolerance > 0)
+                float prog = Interlocked.Add(ref cn, path.points.Length) / (float)nn;
+                prog = (float)Math.Round(prog, 2);
+                if (prog > progress1)
                 {
-                    OptiCurve(path, opttolerance);
+                    ProgressArgs args = new ProgressArgs(ProgressLevel.Tracing, prog);
+                    progress.Report(args);
+                    Interlocked.Exchange(ref progress1, prog);
                 }
-
-                if (progress != null && nn > 0)
-                {
-                    float prog = Interlocked.Add(ref cn, path.points.Length) / (float)nn;
-                    prog = (float)Math.Round(prog, 2);
-                    if (prog > progress1)
-                    {
-                        ProgressArgs args = new ProgressArgs(ProgressLevel.Tracing, prog);
-                        progress.Report(args);
-                        Interlocked.Exchange(ref progress1, prog);
-                    }
-                }
-            });
-            return new TraceResult(plist);
-        }
+            }
+        });
+        return new TraceResult(plist);
     }
 }

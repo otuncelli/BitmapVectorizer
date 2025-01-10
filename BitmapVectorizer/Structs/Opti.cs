@@ -4,27 +4,16 @@
 
 using System.Runtime.CompilerServices;
 
-namespace BitmapVectorizer
-{
-    /* a private type for the result of opti_penalty */
-    internal readonly struct Opti
-    {
-        public readonly FLOAT pen;
-        public readonly VECTOR c0;
-        public readonly VECTOR c1;
-        public readonly FLOAT t;
-        public readonly FLOAT s;
-        public readonly FLOAT alpha;
+namespace BitmapVectorizer;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Opti(FLOAT pen, in VECTOR c0, in VECTOR c1, FLOAT t, FLOAT s, FLOAT alpha)
-        {
-            this.pen = pen;
-            this.c0 = c0;
-            this.c1 = c1;
-            this.t = t;
-            this.s = s;
-            this.alpha = alpha;
-        }
-    }
+/* a private type for the result of opti_penalty */
+[method: MethodImpl(MethodImplOptions.AggressiveInlining)]
+internal readonly struct Opti(FLOAT pen, in VECTOR c0, in VECTOR c1, FLOAT t, FLOAT s, FLOAT alpha)
+{
+    public readonly FLOAT pen = pen;
+    public readonly VECTOR c0 = c0;
+    public readonly VECTOR c1 = c1;
+    public readonly FLOAT t = t;
+    public readonly FLOAT s = s;
+    public readonly FLOAT alpha = alpha;
 }

@@ -5,17 +5,16 @@
 #if !NETCOREAPP3_1_OR_GREATER
 using System.Runtime.CompilerServices;
 
-namespace BitmapVectorizer
+namespace BitmapVectorizer;
+
+public static class HashCode
 {
-    public static class HashCode
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int Combine(int hash1, int hash2)
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Combine(int hash1, int hash2)
-        {
-            int result = hash1;
-            result = unchecked(((result << 5) + result) ^ hash2);
-            return result;
-        }
+        int result = hash1;
+        result = unchecked(((result << 5) + result) ^ hash2);
+        return result;
     }
 }
 #endif

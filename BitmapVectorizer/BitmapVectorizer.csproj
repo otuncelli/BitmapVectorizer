@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     <RootNamespace>BitmapVectorizer</RootNamespace>
-    <TargetFrameworks>net6.0;net47</TargetFrameworks>
+    <TargetFrameworks>net8.0;net48</TargetFrameworks>
     <OutputType>Library</OutputType>
     <LangVersion>Latest</LangVersion>
   </PropertyGroup>
@@ -18,7 +18,7 @@
     <Product>$(RootNamespace)</Product>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='net6.0-windows' Or '$(TargetFramework)'=='net47'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-windows' Or '$(TargetFramework)'=='net47'">
     <DefineConstants>WINDOWS</DefineConstants>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>

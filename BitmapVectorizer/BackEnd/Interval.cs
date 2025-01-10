@@ -4,55 +4,48 @@
 
 using System.Runtime.CompilerServices;
 
-namespace BitmapVectorizer
+namespace BitmapVectorizer;
+
+[method: MethodImpl(MethodImplOptions.AggressiveInlining)]
+internal sealed class Interval(FLOAT min, FLOAT max)
 {
-    internal sealed class Interval
+    public FLOAT Min
     {
-        public FLOAT Min
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get;
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set;
-        }
-
-        public FLOAT Max
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get;
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set;
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Interval(FLOAT min, FLOAT max)
-        {
-            Min = min;
-            Max = max;
-        }
-
+        get;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Interval(FLOAT singleton) : this(singleton, singleton)
-        {
-        }
+        set;
+    } = min;
 
+    public FLOAT Max
+    {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Extend(FLOAT x)
-        {
-            if (x < Min)
-            {
-                Min = x;
-            }
-            else if (x > Max)
-            {
-                Max = x;
-            }
-        }
+        get;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        set;
+    } = max;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool IsIn(FLOAT x)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public Interval(FLOAT singleton) : this(singleton, singleton)
+    {
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void Extend(FLOAT x)
+    {
+        if (x < Min)
         {
-            return Min <= x && x <= Max;
+            Min = x;
         }
+        else if (x > Max)
+        {
+            Max = x;
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public bool IsIn(FLOAT x)
+    {
+        return Min <= x && x <= Max;
     }
 }

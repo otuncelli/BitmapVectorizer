@@ -4,17 +4,16 @@
 
 using System.Linq;
 
-namespace BitmapVectorizer
+namespace BitmapVectorizer;
+
+public sealed class TraceResult
 {
-    public sealed class TraceResult
+    private readonly Path plist;
+
+    internal Path? FirstPath => plist.FirstOrDefault();
+
+    internal TraceResult(Path plist)
     {
-        private readonly Path plist;
-
-        internal Path? FirstPath => plist.FirstOrDefault();
-
-        internal TraceResult(Path plist)
-        {
-            this.plist = plist;
-        }
+        this.plist = plist;
     }
 }

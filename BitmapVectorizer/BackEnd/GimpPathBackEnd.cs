@@ -4,20 +4,19 @@
 
 using System;
 
-namespace BitmapVectorizer
-{
-    public class GimpPathBackEnd : SvgBackEnd
-    {
-        public override bool Opaque
-        {
-            get => false;
-            set => throw new NotSupportedException();
-        }
+namespace BitmapVectorizer;
 
-        public override bool UseGroups
-        {
-            get => false;
-            set => throw new NotSupportedException();
-        }
+public class GimpPathBackEnd : SvgBackEnd
+{
+    public override bool Opaque
+    {
+        get => false;
+        set => throw new NotSupportedException();
+    }
+
+    public override bool UseGroups
+    {
+        get => false;
+        set => throw new NotSupportedException();
     }
 }
